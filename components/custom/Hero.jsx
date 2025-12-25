@@ -5,14 +5,19 @@ import { ArrowRight, Link } from 'lucide-react'
 import React, { use, useContext, useState } from 'react'
 import { UserDetailContext } from '@/context/UserDetailContext';
 import SigninDialog from './SigninDialog';
+import { useMutation } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import { useRouter } from 'next/navigation';
 
 function Hero() {
     const [userInput, setUserInput] = useState('');
     const {message, setMessage} = useContext(MessageContext);
     const {userDetail, setUserDetail} = useContext(UserDetailContext);
     const [openDialog, setOpenDialog] = useState(false);
+    const CreateWorkspace = useMutation(api.workspace.CreateWorkspace);
+    const router = useRouter();
 
-    const onGenrate = (input) => {
+    const onGenrate = async(input) => {
         if(!userDetail?.email) {
             setOpenDialog(true);
             return;
@@ -22,6 +27,16 @@ function Hero() {
             role: 'user',
             content: input
         })
+
+        const workspaceId = await CreateWorkspace({
+            user: userDetail._id,
+            message: [{
+                role: 'user',
+                content: input
+            }]
+        });
+        console.log("Workspace ID: ", workspaceId);
+        router.push(`/workspace/`+workspaceId);
     }
     return (
         <div className='flex flex-col items-center mt-36 xl:mt-52 gap-2'>

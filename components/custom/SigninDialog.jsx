@@ -1,4 +1,6 @@
-import React, { useContext } from 'react'
+import React, { use, useContext } from 'react'
+import { api } from "@/convex/_generated/api";
+
 import {
     Dialog,
     DialogClose,
@@ -14,9 +16,12 @@ import { Button } from '../ui/button'
 import { useGoogleLogin } from '@react-oauth/google';
 import { UserDetailContext } from '@/context/UserDetailContext';
 import axios from 'axios';
+import { useMutation } from 'convex/react';
+import uuid4 from 'uuid4';
 
 function SigninDialog({ openDialog, closeDialog }) {
     const {userDetail, setUserDetail} = useContext(UserDetailContext);
+    const CreateUser = useMutation(api.users.CreateUser);
     const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
         console.log(tokenResponse);
@@ -26,6 +31,17 @@ function SigninDialog({ openDialog, closeDialog }) {
         );
 
         console.log(userInfo);
+        const user = userInfo.data;
+        await CreateUser({
+            name: user?.name,
+            email: user?.email,
+            picture: user?.picture,
+            uid: uuid4(),
+        });
+
+        if (typeof window !== undefined) {
+            localStorage.setItem('user', JSON.stringify(user));
+        }
         setUserDetail(userInfo.data);
         closeDialog(false);
     },
