@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { chatSession } from "@/configs/AiModel";
+
 
 export async function POST(req) {
     const {prompt} = await req.json();
@@ -8,6 +10,7 @@ export async function POST(req) {
         const AIResp = result.response.text();
         return NextResponse.json({result: AIResp})
     } catch (e) {
-        return NextResponse.json({error:e})
+        console.error(e);
+        return NextResponse.json({e})
     }
 }

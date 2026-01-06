@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import Header from "@/components/custom/Header";
-import { MessageContext } from "@/context/MessageContext";
+import { MessagesContext } from "@/context/MessageContext";
 import { UserDetailContext } from "@/context/UserDetailContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useQuery } from "convex/react";
@@ -13,13 +13,11 @@ function Provider({ children }) {
   const [message, setMessage] = useState();
   const [userDetail, setUserDetail] = useState(null);
 
-  // ✅ Get email safely from localStorage
   const email =
     typeof window !== "undefined"
       ? JSON.parse(localStorage.getItem("user"))?.email
       : null;
 
-  // ✅ Convex query (AUTO runs when email exists)
   const convexUser = useQuery(
     api.users.GetUser,
     email ? { email } : "skip"
@@ -34,7 +32,7 @@ function Provider({ children }) {
   return (
     <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
       <UserDetailContext.Provider value={{ userDetail, setUserDetail }}>
-        <MessageContext.Provider value={{ message, setMessage }}>
+        <MessagesContext.Provider value={{ message, setMessage }}>
           <NextThemesProvider
             attribute="class"
             defaultTheme="dark"
@@ -44,7 +42,7 @@ function Provider({ children }) {
             <Header />
             {children}
           </NextThemesProvider>
-        </MessageContext.Provider>
+        </MessagesContext.Provider>
       </UserDetailContext.Provider>
     </GoogleOAuthProvider>
   );
