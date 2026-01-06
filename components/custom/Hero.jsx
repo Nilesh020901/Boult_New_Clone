@@ -1,6 +1,6 @@
 "use client"
 import Lookup from '@/data/Lookup'
-import { MessageContext } from '@/context/MessageContext';
+import { MessagesContext } from '@/context/MessagesContext';
 import { ArrowRight, Link } from 'lucide-react'
 import React, { use, useContext, useState } from 'react'
 import { UserDetailContext } from '@/context/UserDetailContext';
@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 
 function Hero() {
     const [userInput, setUserInput] = useState('');
-    const {message, setMessage} = useContext(MessageContext);
+    const {message, setMessage} = useContext(MessagesContext);
     const {userDetail, setUserDetail} = useContext(UserDetailContext);
     const [openDialog, setOpenDialog] = useState(false);
     const CreateWorkspace = useMutation(api.workspace.CreateWorkspace);

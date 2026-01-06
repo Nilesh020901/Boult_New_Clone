@@ -11,9 +11,9 @@ import { ArrowRight, Link, Loader2Icon } from 'lucide-react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import React, { useContext, useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import { useSidebar } from '../ui/sidebar';
-import { toast } from 'sonner';
+// import ReactMarkdown from 'react-markdown';
+// import { useSidebar } from '../ui/sidebar';
+// import { toast } from 'sonner';
 
 export const countToken = (inputText) => {
   return inputText
@@ -30,7 +30,7 @@ function ChatView() {
   const [userInput, setUserInput] = useState();
   const [loading, setLoading] = useState(false);
   const UpdateMessages = useMutation(api.workspace.UpdateMessages);
-  const { toggleSidebar } = useSidebar();
+  // const { toggleSidebar } = useSidebar();
   const UpdateToken = useMutation(api.users.UpdateToken);
 
   useEffect(() => {
@@ -44,7 +44,7 @@ function ChatView() {
     const result = await convex.query(api.workspace.GetWorkspace, {
       workspaceId: id,
     });
-    setMessages(result?.messages);
+    setMessages(result?.message);
   };
   useEffect(() => {
     if (messages?.length > 0) {
@@ -108,7 +108,7 @@ function ChatView() {
               backgroundColor: Colors.CHAT_BACKGROUND,
             }}
           >
-            {msg?.role == 'user' && (
+            {/* {msg?.role == 'user' && (
               <Image
                 src={userDetail?.picture}
                 alt="userImage"
@@ -116,10 +116,10 @@ function ChatView() {
                 height={35}
                 className="rounded-full"
               />
-            )}
-            <ReactMarkdown className="flex flex-col">
+            )} */}
+            {/* <ReactMarkdown className="flex flex-col">
               {msg?.content}
-            </ReactMarkdown>
+            </ReactMarkdown> */}
           </div>
         ))}
         {loading && (
@@ -137,16 +137,16 @@ function ChatView() {
 
       {/* Input Section */}
       <div className="flex gap-2 items-end ">
-        {userDetail && (
-          <Image
-            onClick={toggleSidebar}
-            src={userDetail?.picture}
-            alt="userImage"
-            width={30}
-            height={30}
-            className="rounded-full cursor-pointer"
-          />
-        )}
+        {/* {userDetail && (
+          // <Image
+          //   onClick={toggleSidebar}
+          //   src={userDetail?.picture}
+          //   alt="userImage"
+          //   width={30}
+          //   height={30}
+          //   className="rounded-full cursor-pointer"
+          // />
+        )} */}
         <div
           className="p-5 border rounded-xl max-w-2xl w-full mt-3"
           style={{
